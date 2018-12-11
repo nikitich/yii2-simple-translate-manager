@@ -1,0 +1,1 @@
+# Yii2 - Simple Translate Manager
