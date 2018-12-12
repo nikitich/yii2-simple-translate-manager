@@ -11,4 +11,6 @@ namespace nikitich\simpletranslatemanager;
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'nikitich\simpletranslatemanager\controllers';
+
+
 }
