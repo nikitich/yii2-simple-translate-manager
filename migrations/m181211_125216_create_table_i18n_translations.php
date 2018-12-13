@@ -1,9 +1,6 @@
 <?php
 
-namespace nikitich\simpletranslatemanager\migrations;
-
 use nikitich\simpletranslatemanager\Defaults;
-use Yii;
 use yii\db\Migration;
 
 /**
@@ -137,21 +134,31 @@ class m181211_125216_create_table_i18n_translations extends Migration
                 ], $tableOptions_mysql);
             } else {
                 $this->createTable($this->language_table, [
-                    'language_id' => $this->string(5),
-                    'language' => 'CHAR(3) NOT NULL',
-                    'country' => 'CHAR(3) NOT NULL',
-                    'name' => 'CHAR(32) NOT NULL',
-                    'name_ascii' => 'CHAR(32) NOT NULL',
-                    'status' => 'smallint NOT NULL',
-                    'PRIMARY KEY (language_id)',
+                    'language_id' => $this->string(5)->notNull(),
+                    'language' => $this->string(3)->notNull(),
+                    'country' => $this->string(3)->notNull(),
+                    'name' => $this->string(32)->notNull(),
+                    'name_ascii' => $this->string(32)->notNull(),
+                    'status' => $this->smallInteger()->notNull(),
                 ]);
-                $this->addPrimaryKey('cat_alias_lang_pk', $this->language_table, ['category', 'alias', 'language']);
+                $this->addPrimaryKey('lang_pk', $this->language_table, ['language_id']);
             }
+
+            $this->batchInsert($this->language_table, [
+                'language_id',
+                'language',
+                'country',
+                'name',
+                'name_ascii',
+                'status',
+            ], $this->languages);
+
         }
     }
 
     public function safeDown()
     {
         $this->dropTable($this->translation_table);
+        $this->dropTable($this->language_table);
     }
 }
