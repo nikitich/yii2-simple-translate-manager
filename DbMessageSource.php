@@ -1,7 +1,6 @@
 <?php
-namespace common\components;
+namespace nikitich\simpletranslatemanager;
 
-use nikitich\simpletranslatemanager\Defaults;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\db\Connection;
@@ -73,6 +72,8 @@ class DbMessageSource extends MessageSource
      */
     public $enableCaching = false;
 
+    // public $forceTranslation = true;
+
     /**
      * Initializes the DbMessageSource component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
@@ -86,6 +87,11 @@ class DbMessageSource extends MessageSource
         if ($this->enableCaching) {
             $this->cache = Instance::ensure($this->cache, Cache::class);
         }
+    }
+
+    public function translate($category, $message, $language)
+    {
+        return $this->translateMessage($category, $message, $language);
     }
 
     /**

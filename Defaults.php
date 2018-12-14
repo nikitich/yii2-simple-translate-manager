@@ -11,9 +11,9 @@ namespace nikitich\simpletranslatemanager;
 
 class Defaults
 {
-    const TRANSLATIONS_TABLE = '{{%i18n_translations}}';
+    const TRANSLATIONS_TABLE = '{{%stm_translations}}';
 
-    const LANGUAGES_TABLE    = '{{%i18n_languages}}';
+    const LANGUAGES_TABLE    = '{{%stm_languages}}';
 
     const CACHE              = 'cache';
 }
