@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model nikitich\simpletranslatemanager\models\StmTranslationsSearch */
+/* @var $model nikitich\simpletranslatemanager\models\StmCategoriesSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="stm-translations-search">
+<div class="stm-categories-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -18,21 +18,9 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'category') ?>
+    <?= $form->field($model, 'category_name') ?>
 
-    <?= $form->field($model, 'alias') ?>
-
-    <?= $form->field($model, 'language') ?>
-
-    <?= $form->field($model, 'translation') ?>
-
-    <?= $form->field($model, 'date_created') ?>
-
-    <?php // echo $form->field($model, 'date_updated') ?>
-
-    <?php // echo $form->field($model, 'author') ?>
-
-    <?php // echo $form->field($model, 'type') ?>
+    <?= $form->field($model, 'comment') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('simpletranslatemanager', 'Search'), ['class' => 'btn btn-primary']) ?>

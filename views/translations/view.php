@@ -26,20 +26,18 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?php try {
-        echo DetailView::widget([
-            'model'      => $model,
-            'attributes' => [
-                'category',
-                'alias',
-                'language',
-                'translation:ntext',
-                'date_created',
-                'date_updated',
-            ],
-        ]);
-    } catch (Exception $e) {
-        echo '<pre>DetailView exception: ' . $e->getMessage() . '</pre>';
-    } ?>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'category',
+            'alias',
+            'language',
+            'translation:ntext',
+            'date_created',
+            'date_updated',
+            'author',
+            'type',
+        ],
+    ]) ?>
 
 </div>

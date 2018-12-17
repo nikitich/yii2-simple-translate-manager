@@ -58,4 +58,16 @@ class StmLanguages extends \yii\db\ActiveRecord
             'status'      => Yii::t('simpletranslatemanager', 'Status'),
         ];
     }
+
+    /**
+     * @return \nikitich\simpletranslatemanager\models\StmLanguages[]|\yii\db\ActiveRecord[]|null
+     */
+    public static function getActiveLanguages()
+    {
+        return self::find()
+            ->where([
+                'status' => self::STATUS_ACTIVE,
+            ])
+            ->all();
+    }
 }

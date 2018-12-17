@@ -4,12 +4,12 @@ namespace nikitich\simpletranslatemanager\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use nikitich\simpletranslatemanager\models\StmTranslations;
+use nikitich\simpletranslatemanager\models\StmCategories;
 
 /**
- * StmTranslationsSearch represents the model behind the search form of `nikitich\simpletranslatemanager\models\StmTranslations`.
+ * StmCategoriesSearch represents the model behind the search form of `nikitich\simpletranslatemanager\models\StmCategories`.
  */
-class StmTranslationsSearch extends StmTranslations
+class StmCategoriesSearch extends StmCategories
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class StmTranslationsSearch extends StmTranslations
     public function rules()
     {
         return [
-            [['category', 'alias', 'language', 'translation', 'date_created', 'date_updated', 'author', 'type'], 'safe'],
+            [['category_name', 'comment'], 'safe'],
         ];
     }
 
@@ -39,7 +39,7 @@ class StmTranslationsSearch extends StmTranslations
      */
     public function search($params)
     {
-        $query = StmTranslations::find();
+        $query = StmCategories::find();
 
         // add conditions that should always apply here
 
@@ -56,17 +56,8 @@ class StmTranslationsSearch extends StmTranslations
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'date_created' => $this->date_created,
-            'date_updated' => $this->date_updated,
-        ]);
-
-        $query->andFilterWhere(['ilike', 'category', $this->category])
-            ->andFilterWhere(['ilike', 'alias', $this->alias])
-            ->andFilterWhere(['ilike', 'language', $this->language])
-            ->andFilterWhere(['ilike', 'translation', $this->translation])
-            ->andFilterWhere(['ilike', 'author', $this->author])
-            ->andFilterWhere(['ilike', 'type', $this->type]);
+        $query->andFilterWhere(['ilike', 'category_name', $this->category_name])
+            ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
         return $dataProvider;
     }
