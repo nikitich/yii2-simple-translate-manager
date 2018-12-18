@@ -2,6 +2,8 @@
 
 namespace nikitich\simpletranslatemanager\controllers;
 
+use nikitich\simpletranslatemanager\models\StmCategories;
+use nikitich\simpletranslatemanager\models\StmCategoriesSearch;
 use Yii;
 use nikitich\simpletranslatemanager\models\StmTranslations;
 use nikitich\simpletranslatemanager\models\StmTranslationsSearch;
@@ -35,12 +37,15 @@ class TranslationsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new StmTranslationsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $translationsSearchModel = new StmTranslationsSearch();
+        $translationsDataProvider = $translationsSearchModel->search(Yii::$app->request->queryParams);
+        $categoriesList = StmCategories::getOptionsList();
+        // var_dump($categoriesList);
+        // die();
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'translationsSearchModel' => $translationsSearchModel,
+            'translationsDataProvider' => $translationsDataProvider,
+            'categoriesList' => $categoriesList,
         ]);
     }
 

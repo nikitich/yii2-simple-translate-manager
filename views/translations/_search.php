@@ -1,24 +1,52 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+use kartik\widgets\Typeahead;
 
 /* @var $this yii\web\View */
 /* @var $model nikitich\simpletranslatemanager\models\StmTranslationsSearch */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form kartik\form\ActiveForm */
 ?>
 
 <div class="stm-translations-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
+        'action'  => ['index'],
+        'method'  => 'get',
         'options' => [
-            'data-pjax' => 1
+            'data-pjax' => 1,
         ],
     ]); ?>
 
-    <?= $form->field($model, 'category') ?>
+    <?php //= $form->field($model, 'category')->dropDownList($categoriesList) ?>
+    <?= $form->field($model, 'category',
+        [
+            'addon' => [
+                'append' => [
+                    'content'  => Html::button('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'btn btn-default', 'onclick' => "document.getElementById('stmtranslationssearch-category').value = ''"]),
+                    'asButton' => true,
+                ],
+            ],
+        ]
+    )->widget(
+        Typeahead::class,
+        [
+            'options'            => ['placeholder' => 'Select category ...'],
+            'pluginOptions'      => ['highlight' => true],
+            // 'defaultSuggestions' => $categoriesList,
+            'defaultSuggestions' => array_keys($categoriesList),
+            'dataset'            => [
+                [
+                    'local' => array_keys($categoriesList),
+                    // 'local' => $categoriesList,
+                    // 'prefetch' => $categoriesList,
+                    // 'display' => 'category_name',
+                    'limit' => 10,
+                ],
+            ],
+        ]
+    ) ?>
 
     <?= $form->field($model, 'alias') ?>
 

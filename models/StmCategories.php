@@ -53,4 +53,14 @@ class StmCategories extends \yii\db\ActiveRecord
     {
         return $this->hasMany(StmTranslations::className(), ['category' => 'category_name']);
     }
+
+    public static function getOptionsList()
+    {
+        $all = self::find()->asArray()->all();
+        // var_dump(array_combine(array_column($all, 'category_name'), array_column($all, 'comment')));
+        // var_dump($all);
+        // var_dump(array_values($all));
+        // die();
+        return array_combine(array_column($all, 'category_name'), array_column($all, 'comment'));
+    }
 }

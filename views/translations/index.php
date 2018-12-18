@@ -4,8 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel nikitich\simpletranslatemanager\models\StmTranslationsSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $translationsSearchModel nikitich\simpletranslatemanager\models\StmTranslationsSearch */
+/* @var $translationsDataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('simpletranslatemanager', 'Stm Translations');
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,15 +14,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $translationsSearchModel, 'categoriesList' => $categoriesList,]); ?>
 
     <p>
         <?= Html::a(Yii::t('simpletranslatemanager', 'Create Stm Translations'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'dataProvider' => $translationsDataProvider,
+        'filterModel' => $translationsSearchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'alias',
             'language',
             'translation:ntext',
-            'date_created',
+            //'date_created',
             //'date_updated',
             //'author',
             //'type',
