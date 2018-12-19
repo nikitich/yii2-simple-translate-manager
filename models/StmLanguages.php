@@ -16,9 +16,9 @@ use Yii;
  */
 class StmLanguages extends \yii\db\ActiveRecord
 {
-    const STATUS_ACTIVE  = 1;
+    const STATUS_ACTIVE   = 1;
 
-    const STATUS_DISBLED = 0;
+    const STATUS_DISABLED = 0;
 
     /**
      * {@inheritdoc}
@@ -70,4 +70,15 @@ class StmLanguages extends \yii\db\ActiveRecord
             ])
             ->all();
     }
+
+    public static function getOptionsList()
+    {
+        $all = self::find()
+            ->select(['language_id' , 'CONCAT(name, \' (\', language_id, \')\' ) AS name'])
+            ->where(['status' => self::STATUS_ACTIVE])
+            ->asArray()
+            ->all();
+        return array_merge(['' => 'All'], array_combine(array_column($all, 'language_id'), array_column($all, 'name')));
+    }
+
 }

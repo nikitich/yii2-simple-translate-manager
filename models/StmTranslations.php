@@ -7,17 +7,17 @@ use Yii;
 /**
  * This is the model class for table "stm_translations".
  *
- * @property string $category
- * @property string $alias
- * @property string $language
- * @property string $translation
- * @property string $date_created
- * @property string $date_updated
- * @property string $author
- * @property string $type
+ * @property string        $category
+ * @property string        $alias
+ * @property string        $language
+ * @property string        $translation
+ * @property string        $date_created
+ * @property string        $date_updated
+ * @property string        $author
+ * @property string        $type
  *
  * @property StmCategories $category0
- * @property StmLanguages $category1
+ * @property StmLanguages  $language0
  */
 class StmTranslations extends \yii\db\ActiveRecord
 {
@@ -42,8 +42,20 @@ class StmTranslations extends \yii\db\ActiveRecord
             [['language'], 'string', 'max' => 5],
             [['type'], 'string', 'max' => 16],
             [['category', 'alias', 'language'], 'unique', 'targetAttribute' => ['category', 'alias', 'language']],
-            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => StmCategories::className(), 'targetAttribute' => ['category' => 'category_name']],
-            [['category'], 'exist', 'skipOnError' => true, 'targetClass' => StmLanguages::className(), 'targetAttribute' => ['category' => 'language_id']],
+            [
+                ['category'],
+                'exist',
+                'skipOnError'     => true,
+                'targetClass'     => StmCategories::className(),
+                'targetAttribute' => ['category' => 'category_name'],
+            ],
+            [
+                ['language'],
+                'exist',
+                'skipOnError'     => true,
+                'targetClass'     => StmLanguages::className(),
+                'targetAttribute' => ['language' => 'language_id'],
+            ],
         ];
     }
 
@@ -53,14 +65,14 @@ class StmTranslations extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'category' => Yii::t('simpletranslatemanager', 'Category'),
-            'alias' => Yii::t('simpletranslatemanager', 'Alias'),
-            'language' => Yii::t('simpletranslatemanager', 'Language'),
-            'translation' => Yii::t('simpletranslatemanager', 'Translation'),
+            'category'     => Yii::t('simpletranslatemanager', 'Category'),
+            'alias'        => Yii::t('simpletranslatemanager', 'Alias'),
+            'language'     => Yii::t('simpletranslatemanager', 'Language'),
+            'translation'  => Yii::t('simpletranslatemanager', 'Translation'),
             'date_created' => Yii::t('simpletranslatemanager', 'Date Created'),
             'date_updated' => Yii::t('simpletranslatemanager', 'Date Updated'),
-            'author' => Yii::t('simpletranslatemanager', 'Author'),
-            'type' => Yii::t('simpletranslatemanager', 'Type'),
+            'author'       => Yii::t('simpletranslatemanager', 'Author'),
+            'type'         => Yii::t('simpletranslatemanager', 'Type'),
         ];
     }
 
@@ -75,8 +87,42 @@ class StmTranslations extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory1()
+    public function getLanguage0()
     {
-        return $this->hasOne(StmLanguages::className(), ['language_id' => 'category']);
+        return $this->hasOne(StmLanguages::className(), ['language_id' => 'language']);
+    }
+
+    /**
+     * @param $form \kartik\form\ActiveForm
+     *
+     * @return array
+     */
+    public function getFormTabs($form)
+    {
+        $translations = self::find()
+            ->where([
+                'alias'    => $this->alias,
+                'category' => $this->category,
+            ])
+            ->all();
+
+        $tabs = [];
+
+        foreach ($translations as $translation) {
+            /** @var $translation \nikitich\simpletranslatemanager\models\StmTranslations */
+            $tabs[] = [
+                'label'   => $translation->language,
+                'content' => $form->field($translation, 'translation')->textarea([
+                    'rows' => 6,
+                    'name' => self::formName() . "[translations][{$translation->language}]",
+                ]),
+                'active'  => $translation->language == $this->language,
+            ];
+        }
+
+        // var_dump($tabs);
+        // die();
+
+        return $tabs;
     }
 }

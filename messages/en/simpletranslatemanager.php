@@ -8,7 +8,7 @@
 
 return [
     'Stm Translations' => 'List of Translations',
-    'Create Stm Translations' => 'New Translation',
+    'Create Stm Translations' => 'Create new Translation',
     'Stm Categories' => 'Translations Categories',
     'Create Stm Categories' => 'New Category',
 ];

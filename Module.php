@@ -27,6 +27,13 @@ class Module extends \yii\base\Module
             ];
         }
 
+        if (1==0) {
+            Yii::$app->getUrlManager()->addRules([
+                '/i18n/translations/update/<category:\w+>/<alias:\w+>/<language:\w+>' => '/i18n/translations/update',
+            ], false);
+        }
+
+
     }
 
 }

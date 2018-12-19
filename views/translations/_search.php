@@ -10,7 +10,6 @@ use kartik\widgets\Typeahead;
 ?>
 
 <div class="stm-translations-search">
-
     <?php $form = ActiveForm::begin([
         'action'  => ['index'],
         'method'  => 'get',
@@ -18,55 +17,70 @@ use kartik\widgets\Typeahead;
             'data-pjax' => 1,
         ],
     ]); ?>
-
-    <?php //= $form->field($model, 'category')->dropDownList($categoriesList) ?>
-    <?= $form->field($model, 'category',
-        [
-            'addon' => [
-                'append' => [
-                    'content'  => Html::button('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'btn btn-default', 'onclick' => "document.getElementById('stmtranslationssearch-category').value = ''"]),
-                    'asButton' => true,
-                ],
-            ],
-        ]
-    )->widget(
-        Typeahead::class,
-        [
-            'options'            => ['placeholder' => 'Select category ...'],
-            'pluginOptions'      => ['highlight' => true],
-            // 'defaultSuggestions' => $categoriesList,
-            'defaultSuggestions' => array_keys($categoriesList),
-            'dataset'            => [
+    <div class="row">
+        <div class="col-xs-6 col-lg-3">
+            <?= $form->field($model, 'category',
                 [
-                    'local' => array_keys($categoriesList),
-                    // 'local' => $categoriesList,
-                    // 'prefetch' => $categoriesList,
-                    // 'display' => 'category_name',
-                    'limit' => 10,
-                ],
-            ],
-        ]
-    ) ?>
+                    'addon' => [
+                        'append' => [
+                            'content'  => Html::button('<span class="glyphicon glyphicon-remove"></span>', [
+                                'class'   => 'btn btn-default',
+                                'onclick' => "document.getElementById('stmtranslationssearch-category').value = ''",
+                            ]),
+                            'asButton' => true,
+                        ],
+                    ],
+                ]
+            )->widget(
+                Typeahead::class,
+                [
+                    'options'            => ['placeholder' => 'Select category ...'],
+                    'pluginOptions'      => ['highlight' => true],
+                    'defaultSuggestions' => array_keys($categoriesList),
+                    'dataset'            => [
+                        [
+                            'local' => array_keys($categoriesList),
+                            'limit' => 10,
+                        ],
+                    ],
+                ]
+            ) ?>
+        </div>
+        <div class="col-xs-6 col-lg-3">
+            <?= $form->field($model, 'language')->dropDownList($languagesList) ?>
+        </div>
+    </div>
+    <div class="row">
 
-    <?= $form->field($model, 'alias') ?>
+        <div class="col-xs-12 col-lg-6">
+            <div id="additional_search_fields" class="collapse">
+                <?= $form->field($model, 'alias') ?>
 
-    <?= $form->field($model, 'language') ?>
+                <?= $form->field($model, 'translation') ?>
 
-    <?= $form->field($model, 'translation') ?>
+                <?php // echo $form->field($model, 'date_created') ?>
 
-    <?= $form->field($model, 'date_created') ?>
+                <?php // echo $form->field($model, 'date_updated') ?>
 
-    <?php // echo $form->field($model, 'date_updated') ?>
+                <?php // echo $form->field($model, 'author') ?>
 
-    <?php // echo $form->field($model, 'author') ?>
+                <?php // echo $form->field($model, 'type') ?>
 
-    <?php // echo $form->field($model, 'type') ?>
+            </div>
+            <div class="form-group">
+                <?= Html::a('Additional fields', ['#'],['class' => 'btn btn-primary', 'data-toggle'=>"collapse", 'data-target'=>"#additional_search_fields"]) ?>
+                <?= Html::submitButton(Yii::t('simpletranslatemanager', 'Search'), ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(Yii::t('simpletranslatemanager', 'Reset'), ['/i18n/translations'], ['class' => 'btn btn-default']) ?>
+                <span class="pull-right"><?= Html::a(
+                        Yii::t('simpletranslatemanager', 'Create Stm Translations'),
+                        ['create'],
+                        ['class' => 'btn btn-success']
+                    ) ?></span>
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('simpletranslatemanager', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('simpletranslatemanager', 'Reset'), ['class' => 'btn btn-default']) ?>
+            </div>
+
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>
