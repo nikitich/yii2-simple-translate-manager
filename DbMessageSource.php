@@ -72,7 +72,19 @@ class DbMessageSource extends MessageSource
      */
     public $enableCaching = false;
 
-    // public $forceTranslation = true;
+    /**
+     * Generate urls to translation interface
+     * @var bool
+     */
+    public $enableAdimPanelUrls = false;
+
+    /**
+     * Url to admin site including module id and schema
+     * 'http://admin.mydomain.com/i18n/'
+     *
+     * @var string
+     */
+    public $I18nAdminPanelUrl = '';
 
     /**
      * Initializes the DbMessageSource component.

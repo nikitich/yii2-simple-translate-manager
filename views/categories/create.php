@@ -8,6 +8,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('simpletranslatemanager', 'Create Stm Categories');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-categories-create">
 

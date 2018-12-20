@@ -14,6 +14,8 @@ class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'nikitich\simpletranslatemanager\controllers';
 
+    public $defaultLanguage = 'en-US';
+
     public function init()
     {
         parent::init();

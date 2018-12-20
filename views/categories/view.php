@@ -10,6 +10,7 @@ $this->title = $model->category_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-categories-view">
 

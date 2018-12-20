@@ -7,6 +7,7 @@ use kartik\widgets\Typeahead;
 /* @var $this yii\web\View */
 /* @var $model nikitich\simpletranslatemanager\models\StmTranslationsSearch */
 /* @var $form kartik\form\ActiveForm */
+/* @var $categoriesList array */
 ?>
 
 <div class="stm-translations-search">
@@ -68,7 +69,7 @@ use kartik\widgets\Typeahead;
 
             </div>
             <div class="form-group">
-                <?= Html::a('Additional fields', ['#'],['class' => 'btn btn-primary', 'data-toggle'=>"collapse", 'data-target'=>"#additional_search_fields"]) ?>
+                <?= Html::button(Yii::t('simpletranslatemanager', 'Additional fields'), ['class' => 'btn btn-primary', 'data-toggle'=>"collapse", 'data-target'=>"#additional_search_fields"]) ?>
                 <?= Html::submitButton(Yii::t('simpletranslatemanager', 'Search'), ['class' => 'btn btn-primary']) ?>
                 <?= Html::a(Yii::t('simpletranslatemanager', 'Reset'), ['/i18n/translations'], ['class' => 'btn btn-default']) ?>
                 <span class="pull-right"><?= Html::a(

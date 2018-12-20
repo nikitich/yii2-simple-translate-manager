@@ -1,0 +1,12 @@
+.stm-translation-exists {
+    font-weight: bold;
+    color: green !important;
+}
+
+.stm_t_snippet {
+    width: 100%;
+    float: right;
+    font-family: monospace;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -9,9 +9,13 @@ use nikitich\simpletranslatemanager\models\StmTranslations;
 /* @var $this yii\web\View */
 /* @var $translationsSearchModel nikitich\simpletranslatemanager\models\StmTranslationsSearch */
 /* @var $translationsDataProvider yii\data\ActiveDataProvider */
+/* @var $categoriesList array */
+/* @var $languagesList array */
 
-$this->title                   = Yii::t('simpletranslatemanager', 'Stm Translations');
-$this->params['breadcrumbs'][] = $this->title;
+$translationsDataProvider->pagination->pageSize = 7;
+$this->title                                    = Yii::t('simpletranslatemanager', 'Stm Translations');
+$this->params['breadcrumbs'][]                  = $this->title;
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-translations-index">
 
@@ -29,6 +33,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterRowOptions' => [
             'style' => 'display: none;',
         ],
+        'pager'            => [
+            'options' => [
+                'class' => 'pagination',
+                'style' => 'margin: 0 !important;',
+            ],
+        ],
+        'layout'           => "
+            <div class='row' style='height: 40px;'>
+                <div class='col-xs-6' style='height: 38px;'>{pager}</div> 
+                <div class='col-xs-6 align-bottom' style='height: 38px;'>
+                    <span class='pull-right'>{summary}</span>
+                </div>
+            </div>
+            \n{items}
+        ",
         'columns'          => [
             ['class' => 'yii\grid\SerialColumn'],
             [

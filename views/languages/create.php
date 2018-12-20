@@ -8,6 +8,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('simpletranslatemanager', 'Create Stm Languages');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Languages'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-languages-create">
 

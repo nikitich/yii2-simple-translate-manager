@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('simpletranslatemanager', 'Stm Categories');
 $this->params['breadcrumbs'][] = $this->title;
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-categories-index">
 

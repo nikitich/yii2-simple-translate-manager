@@ -11,6 +11,7 @@ $this->title = Yii::t('simpletranslatemanager', 'Update Stm Categories: {name}',
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->category_name, 'url' => ['view', 'id' => $model->category_name]];
 $this->params['breadcrumbs'][] = Yii::t('simpletranslatemanager', 'Update');
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-categories-update">
 

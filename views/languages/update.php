@@ -11,6 +11,7 @@ $this->title = Yii::t('simpletranslatemanager', 'Update Stm Languages: {name}', 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Languages'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->language_id]];
 $this->params['breadcrumbs'][] = Yii::t('simpletranslatemanager', 'Update');
+\nikitich\simpletranslatemanager\assets\StmAsset::register($this);
 ?>
 <div class="stm-languages-update">
 

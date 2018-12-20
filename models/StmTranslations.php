@@ -35,7 +35,7 @@ class StmTranslations extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category', 'alias', 'language', 'translation', 'date_created', 'date_updated'], 'required'],
+            [['category', 'alias', 'language', 'date_created', 'date_updated'], 'required'],
             [['translation'], 'string'],
             [['date_created', 'date_updated'], 'safe'],
             [['category', 'alias', 'author'], 'string', 'max' => 255],
@@ -90,39 +90,5 @@ class StmTranslations extends \yii\db\ActiveRecord
     public function getLanguage0()
     {
         return $this->hasOne(StmLanguages::className(), ['language_id' => 'language']);
-    }
-
-    /**
-     * @param $form \kartik\form\ActiveForm
-     *
-     * @return array
-     */
-    public function getFormTabs($form)
-    {
-        $translations = self::find()
-            ->where([
-                'alias'    => $this->alias,
-                'category' => $this->category,
-            ])
-            ->all();
-
-        $tabs = [];
-
-        foreach ($translations as $translation) {
-            /** @var $translation \nikitich\simpletranslatemanager\models\StmTranslations */
-            $tabs[] = [
-                'label'   => $translation->language,
-                'content' => $form->field($translation, 'translation')->textarea([
-                    'rows' => 6,
-                    'name' => self::formName() . "[translations][{$translation->language}]",
-                ]),
-                'active'  => $translation->language == $this->language,
-            ];
-        }
-
-        // var_dump($tabs);
-        // die();
-
-        return $tabs;
     }
 }
