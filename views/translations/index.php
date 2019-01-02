@@ -11,6 +11,7 @@ use nikitich\simpletranslatemanager\models\StmTranslations;
 /* @var $translationsDataProvider yii\data\ActiveDataProvider */
 /* @var $categoriesList array */
 /* @var $languagesList array */
+/* @var $importUploadForm \nikitich\simpletranslatemanager\models\forms\StmImportUploadForm */
 
 $translationsDataProvider->pagination->pageSize = 7;
 $this->title                                    = Yii::t('simpletranslatemanager', 'Stm Translations');
@@ -22,9 +23,10 @@ $this->params['breadcrumbs'][]                  = $this->title;
     <?php Pjax::begin(); ?>
 
     <?php echo $this->render('_search', [
-        'model'          => $translationsSearchModel,
-        'categoriesList' => $categoriesList,
-        'languagesList'  => $languagesList,
+        'model'            => $translationsSearchModel,
+        'categoriesList'   => $categoriesList,
+        'languagesList'    => $languagesList,
+        'importUploadForm' => $importUploadForm,
     ]); ?>
 
     <?= GridView::widget([

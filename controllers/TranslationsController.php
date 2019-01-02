@@ -5,13 +5,17 @@ namespace nikitich\simpletranslatemanager\controllers;
 use nikitich\simpletranslatemanager\models\forms\StmTranslationsForm;
 use nikitich\simpletranslatemanager\models\StmCategories;
 use nikitich\simpletranslatemanager\models\StmLanguages;
+use nikitich\simpletranslatemanager\services\StmImexService;
 use Yii;
 use yii\db\Expression;
 use nikitich\simpletranslatemanager\models\StmTranslations;
 use nikitich\simpletranslatemanager\models\StmTranslationsSearch;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use yii\web\Response;
 
 /**
  * TranslationsController implements the CRUD actions for StmTranslations model.
@@ -44,12 +48,14 @@ class TranslationsController extends Controller
         $translationsDataProvider = $translationsSearchModel->search(Yii::$app->request->queryParams);
         $categoriesList           = StmCategories::getOptionsList();
         $languagesList            = StmLanguages::getOptionsList();
+        $importUploadForm         = StmImexService::getUploadFormInstance();
 
         return $this->render('index', [
             'translationsSearchModel'  => $translationsSearchModel,
             'translationsDataProvider' => $translationsDataProvider,
             'categoriesList'           => $categoriesList,
             'languagesList'            => $languagesList,
+            'importUploadForm'         => $importUploadForm,
         ]);
     }
 
@@ -177,6 +183,54 @@ class TranslationsController extends Controller
         $this->findModel($category, $alias, $language_id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     *
+     *
+     * @return string|\yii\console\Response|\yii\web\Response
+     */
+    public function actionExport()
+    {
+        $translationsSearchModel  = new StmTranslationsSearch();
+        $translationsDataProvider = $translationsSearchModel->search(Yii::$app->request->queryParams);
+
+        $file = StmImexService::exportTranslations($translationsDataProvider);
+        if ($file !== null && file_exists($file)) {
+            return Yii::$app->response->sendFile( $file );
+        }
+        return Url::toRoute(array_merge(['i18n/index'], Yii::$app->request->queryParams));
+    }
+
+    public function actionImport()
+    {
+
+        $request = Yii::$app->request;
+        $filename = '';
+
+        if ($request->getIsPost() && $request->getIsAjax()) {
+
+            $this->enableCsrfValidation = false;
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $importUploadForm         = StmImexService::getUploadFormInstance();
+            $importUploadForm->translationsFile = UploadedFile::getInstance($importUploadForm, 'translationsFile');
+            if ($importUploadForm->upload()) {
+                $filename = $importUploadForm->translationsFile->getBaseName();
+                $filename .= '.' . $importUploadForm->translationsFile->getExtension();
+                return $this->redirect(['translations/import', 'file' => $filename]);
+            } else {
+                return $importUploadForm->getErrors();
+            }
+        }
+
+        if (isset($request->queryParams['file'])) {
+            $filename = $request->queryParams['file'];
+        }
+
+        return $this->render('import', [
+            'filename' => $filename,
+        ]);
     }
 
     /**

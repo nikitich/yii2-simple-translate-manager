@@ -15,6 +15,8 @@ class Module extends \yii\base\Module
     public $controllerNamespace = 'nikitich\simpletranslatemanager\controllers';
 
     public $defaultLanguage = 'en-US';
+    
+    public $tmpExImFolder = '';
 
     public function init()
     {
@@ -28,6 +30,8 @@ class Module extends \yii\base\Module
                 'basePath' => '@nikitich/simpletranslatemanager/messages',
             ];
         }
+
+        $this->tmpExImFolder = empty(trim($this->tmpExImFolder)) ? Yii::getAlias('@runtime/exim') : Yii::getAlias($this->tmpExImFolder);
 
         if (1==0) {
             Yii::$app->getUrlManager()->addRules([

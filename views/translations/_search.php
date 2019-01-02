@@ -3,11 +3,14 @@
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\widgets\Typeahead;
+use yii\bootstrap\Modal;
+use kartik\widgets\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model nikitich\simpletranslatemanager\models\StmTranslationsSearch */
 /* @var $form kartik\form\ActiveForm */
 /* @var $categoriesList array */
+/* @var $importUploadForm \nikitich\simpletranslatemanager\models\forms\StmImportUploadForm */
 ?>
 
 <div class="stm-translations-search">
@@ -69,9 +72,14 @@ use kartik\widgets\Typeahead;
 
             </div>
             <div class="form-group">
-                <?= Html::button(Yii::t('simpletranslatemanager', 'Additional fields'), ['class' => 'btn btn-primary', 'data-toggle'=>"collapse", 'data-target'=>"#additional_search_fields"]) ?>
+                <?= Html::button(Yii::t('simpletranslatemanager', 'Additional fields'), [
+                    'class'       => 'btn btn-primary',
+                    'data-toggle' => "collapse",
+                    'data-target' => "#additional_search_fields",
+                ]) ?>
                 <?= Html::submitButton(Yii::t('simpletranslatemanager', 'Search'), ['class' => 'btn btn-primary']) ?>
-                <?= Html::a(Yii::t('simpletranslatemanager', 'Reset'), ['/i18n/translations'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a(Yii::t('simpletranslatemanager', 'Reset'), ['/i18n/translations'],
+                    ['class' => 'btn btn-default']) ?>
                 <span class="pull-right"><?= Html::a(
                         Yii::t('simpletranslatemanager', 'Create Stm Translations'),
                         ['create'],
@@ -81,7 +89,47 @@ use kartik\widgets\Typeahead;
             </div>
 
         </div>
+        <?php ActiveForm::end(); ?>
+
+        <div class="col-xs-12 col-lg-6">
+            <div class="form-group">
+                <span class="pull-right">
+                    <?= Html::a(
+                        Yii::t('simpletranslatemanager', 'Export'),
+                        array_merge(['export'], Yii::$app->request->queryParams),
+                        [
+                            'class'     => 'btn btn-primary',
+                            'data-pjax' => "0",
+                        ]
+                    ) ?>
+                    <?php
+                    Modal::begin([
+                        'header'       => 'Select File for import translations',
+                        'toggleButton' => [
+                            'label' => Yii::t('simpletranslatemanager', 'Import'),
+                            'class' => 'btn btn-default',
+                        ],
+                    ]);
+                    $form_upload = ActiveForm::begin([
+                        'action'  => ['import'],
+                        'options' => [
+                            'enctype' => 'multipart/form-data', // important
+                            'data-pjax' => 1,
+                        ]
+                    ]);
+                    echo $form_upload->field($importUploadForm, 'translationsFile')->widget(FileInput::class, [
+                        'options' => ['accept' => 'xls'],
+                        'pluginOptions' => [
+                            'uploadUrl' => \yii\helpers\Url::to('translations/import'),
+                            'maxFileCount' => 1,
+                        ]
+                    ]);
+                    ActiveForm::end();
+                    Modal::end();
+                    ?>
+                </span>
+            </div>
+        </div>
     </div>
 
-    <?php ActiveForm::end(); ?>
 </div>
