@@ -68,8 +68,16 @@ $this->params['breadcrumbs'][]                  = $this->title;
                 'filter'    => false,
             ],
             [
-                'value' => 'translation',
+                'value' => function($model){
+                    /* @var $model StmTranslations*/
+                    $txt = $model->translation;
+                    if (strlen(trim($txt)) > 90) {
+                        $txt = substr($txt, 0, 90);
+                    }
+                    return $txt;
+                },
                 'label' => Yii::t('simpletranslatemanager', 'Translation'),
+
             ],
             //'translation:ntext',
             //'date_created',
@@ -110,18 +118,6 @@ $this->params['breadcrumbs'][]                  = $this->title;
 
                         return $html;
                     },
-                    // 'delete' => function ($url, $model, $key) {
-                    //     /** @var $model StmTranslations */
-                    //     $url  = Url::toRoute([
-                    //         'translations/delete',
-                    //         'alias'       => $model->alias,
-                    //         'category'    => $model->category,
-                    //         'language_id' => $model->language,
-                    //     ]);
-                    //     $html = Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, ['class' => 'btn btn-primary']);
-                    //
-                    //     return $html;
-                    // },
                 ],
             ],
         ],

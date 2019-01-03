@@ -10,6 +10,7 @@ use kartik\widgets\FileInput;
 /* @var $model nikitich\simpletranslatemanager\models\StmTranslationsSearch */
 /* @var $form kartik\form\ActiveForm */
 /* @var $categoriesList array */
+/* @var $languagesList array */
 /* @var $importUploadForm \nikitich\simpletranslatemanager\models\forms\StmImportUploadForm */
 ?>
 
@@ -120,7 +121,7 @@ use kartik\widgets\FileInput;
                     echo $form_upload->field($importUploadForm, 'translationsFile')->widget(FileInput::class, [
                         'options' => ['accept' => 'xls'],
                         'pluginOptions' => [
-                            'uploadUrl' => \yii\helpers\Url::to('translations/import'),
+                            'uploadUrl' => \yii\helpers\Url::toRoute('translations/import'),
                             'maxFileCount' => 1,
                         ]
                     ]);
