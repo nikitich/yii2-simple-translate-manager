@@ -11,4 +11,9 @@ return [
     'Create Stm Translations' => 'Create new Translation',
     'Stm Categories' => 'Translations Categories',
     'Create Stm Categories' => 'New Category',
+    'Stm Languages' => 'List of languages',
+    'Create Stm Languages' => 'Add language',
+    'Update Stm Languages: {name}' => 'Update Language: {name}',
+    'Export' => 'Export',
+    'Import' => 'Import',
 ];

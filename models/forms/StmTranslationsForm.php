@@ -10,12 +10,10 @@ namespace nikitich\simpletranslatemanager\models\forms;
 
 use Yii;
 use nikitich\simpletranslatemanager\models\StmLanguages;
-use nikitich\simpletranslatemanager\models\StmCategories;
 use nikitich\simpletranslatemanager\models\StmTranslations;
-use yii\base\Model;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use yii\validators\StringValidator;
+use yii\helpers\Html;
 
 class StmTranslationsForm extends StmTranslations
 {
@@ -44,14 +42,14 @@ class StmTranslationsForm extends StmTranslations
         }
     }
 
+    /**
+     * @param bool $runValidation
+     * @param null $attributeNames
+     *
+     * @return bool
+     */
     public function save($runValidation = true, $attributeNames = null)
     {
-        // var_dump($this->getOldAttributes());
-        // var_dump(Yii::$app->controller->module);
-        // var_dump($this->validate());
-        // var_dump($this->getErrors());
-        // var_dump($this->translations);
-        // die();
         $status = 1;
         if ($this->validate()) {
             foreach ($this->translations as $language_id => $translation) {
@@ -62,7 +60,7 @@ class StmTranslationsForm extends StmTranslations
                     'category' => $this->getOldAttribute('category'),
                 ]);
 
-                if (empty($oTranslation) && !empty($translation)) {
+                if (empty($oTranslation) && ! empty($translation)) {
                     $oTranslation = new StmTranslations(['date_created' => new Expression('NOW()')]);
                 }
 
@@ -72,7 +70,7 @@ class StmTranslationsForm extends StmTranslations
                     $oTranslation->language     = $language_id;
                     $oTranslation->translation  = $translation;
                     $oTranslation->date_updated = new Expression('NOW()');
-                    $oTranslation->author = Yii::$app->user->getIdentity()->username;
+                    $oTranslation->author       = self::_getAuthor();
 
                     if ( ! $oTranslation->save()) {
                         $this->addErrors($oTranslation->getErrors());
@@ -90,6 +88,7 @@ class StmTranslationsForm extends StmTranslations
      * @param boolean                 $view_only
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFormTabs($form, $view_only = false)
     {
@@ -97,8 +96,7 @@ class StmTranslationsForm extends StmTranslations
             ->select(['language_id AS label', '(\'\') AS content', '(FALSE) AS active'])
             ->where(['status' => StmLanguages::STATUS_ACTIVE])
             ->asArray()
-            ->all()
-        ;
+            ->all();
 
         $tabs = array_combine(array_column($languages, 'label'), array_values($languages));
 
@@ -120,20 +118,20 @@ class StmTranslationsForm extends StmTranslations
 
         foreach ($tabs as $language_id => &$tab) {
             if (empty($tab['content'])) {
-                $model = new StmTranslations();
-                $model->language = $language_id;
-                $model->category = $this->category;
-                $model->alias = $this->alias;
+                $model              = new StmTranslations();
+                $model->language    = $language_id;
+                $model->category    = $this->category;
+                $model->alias       = $this->alias;
                 $model->translation = '';
-                $tab['content'] = $this->_getTabContent($model, $form, $view_only);
-                $tab['active'] = $language_id == $this->language;
+                $tab['content']     = $this->_getTabContent($model, $form, $view_only);
+                $tab['active']      = $language_id == $this->language;
             }
         }
 
         if (array_sum(array_column($tabs, 'active')) == 0) {
             if (isset($tabs['en-US'])) {
                 $tabs['en-US']['active'] = true;
-            } elseif(count($tabs) > 0) {
+            } elseif (count($tabs) > 0) {
                 reset($tabs);
                 $tabs[key($tabs)]['active'] = true;
             }
@@ -146,11 +144,14 @@ class StmTranslationsForm extends StmTranslations
      * @param StmTranslations         $model
      * @param \kartik\form\ActiveForm $form
      * @param bool                    $view_only
+     *
+     * @return \kartik\form\ActiveField|string
+     * @throws \yii\base\InvalidConfigException
      */
     private function _getTabContent($model, $form, $view_only = false)
     {
         if ($view_only) {
-            return $model->translation;
+            return Html::encode($model->translation);
         } else {
             return $form->field($model, 'translation')->textarea([
                 'rows' => 6,
@@ -159,4 +160,22 @@ class StmTranslationsForm extends StmTranslations
         }
     }
 
+    /**
+     * @return string
+     */
+    private static function _getAuthor()
+    {
+        try {
+            $identity = Yii::$app->user->getIdentity();
+            if (isset($identity->username)) {
+                $author = $identity->username;
+            } else {
+                $author = "user_id_" . $identity->getId();
+            }
+        } catch (\Throwable $e) {
+            $author = "unknown";
+        }
+
+        return $author;
+    }
 }

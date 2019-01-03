@@ -2,21 +2,22 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model \nikitich\simpletranslatemanager\models\forms\StmTranslationsForm */
 
-$this->title                   = $model->category;
+$this->title                   = "{$model->category} : {$model->alias}";
 $this->params['breadcrumbs'][] = ['label' => Yii::t('simpletranslatemanager', 'Stm Translations'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 \nikitich\simpletranslatemanager\assets\StmAsset::register($this);
-$snippet = "<?= Yii::t('{$model->category}', '{$model->alias}') ?>";
 ?>
 <div class="stm-translations-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::a(Html::encode($model->category),
+            [Url::toRoute('translations/index'), 'StmTranslationsSearch' => ['category' => $model->category]]) ?></h1>
 
     <div class="row">
         <div class="col-xs-12">
@@ -30,17 +31,48 @@ $snippet = "<?= Yii::t('{$model->category}', '{$model->alias}') ?>";
                     'data'  => [
                         'confirm' => Yii::t('simpletranslatemanager',
                                 'Are you sure you want to delete this translation?') .
-                            "\n\n [{$model->language}] {$model->category}\\{$model->alias} " .
+                            "\n\n [{$model->language}]\n[{$model->category}]\n[{$model->alias}]" .
                             "\n\n Note: this will delete only traslation for one language: \n [{$model->language}]",
                         'method'  => 'post',
                     ],
                 ]) ?>
+            <?= Html::a(
+                Yii::t('simpletranslatemanager', 'Create Stm Translations'),
+                ['create', 'category' => $model->category],
+                ['class' => 'btn btn-success']
+            ) ?>
 
-            <?php if (YII_ENV_DEV === true): ?>
-            <?= Html::input('text', 'snippet', $snippet, ['class' => 'stm_t_snippet', 'disabled' => 'disabled']) ?>
-            <?php endif; ?>
         </div>
     </div>
+    <?php if (YII_ENV_DEV === true): ?>
+    <?php
+        $snippet_php  = "Yii::t('{$model->category}', '{$model->alias}')";
+        $snippet_html = "<?= {$snippet_php} ?>";
+    ?>
+    <div class="row stm_snippets">
+        <div class="col-xs-12">
+            <?= TabsX::widget([
+                'items'        => [
+                    [
+                        'label'   => 'HTML',
+                        'content' => Html::input('text', 'snippet', $snippet_html,
+                            ['class' => 'stm_t_snippet', 'disabled' => 'disabled']),
+                        'active'  => true,
+                    ],
+                    [
+                        'label'   => 'PHP',
+                        'content' => Html::input('text', 'snippet', $snippet_php,
+                            ['class' => 'stm_t_snippet', 'disabled' => 'disabled']),
+                        'active'  => false,
+                    ],
+                ],
+                'position'     => TabsX::POS_ABOVE,
+                'bordered'     => true,
+                'encodeLabels' => false,
+            ]) ?>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <div class="row">
         <div class="col-xs-12">
@@ -49,12 +81,9 @@ $snippet = "<?= Yii::t('{$model->category}', '{$model->alias}') ?>";
                 'attributes' => [
                     'category',
                     'alias',
-                    'language',
-                    'translation:ntext',
                     'date_created',
                     'date_updated',
                     'author',
-                    // 'type',
                 ],
             ]) ?>
         </div>

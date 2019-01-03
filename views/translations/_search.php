@@ -12,6 +12,12 @@ use kartik\widgets\FileInput;
 /* @var $categoriesList array */
 /* @var $languagesList array */
 /* @var $importUploadForm \nikitich\simpletranslatemanager\models\forms\StmImportUploadForm */
+
+$create_options = ['create'];
+if (isset($model->category)) {
+    $create_options['category'] = $model->category;
+}
+
 ?>
 
 <div class="stm-translations-search">
@@ -83,7 +89,7 @@ use kartik\widgets\FileInput;
                     ['class' => 'btn btn-default']) ?>
                 <span class="pull-right"><?= Html::a(
                         Yii::t('simpletranslatemanager', 'Create Stm Translations'),
-                        ['create'],
+                        $create_options,
                         ['class' => 'btn btn-success']
                     ) ?></span>
 

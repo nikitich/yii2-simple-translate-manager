@@ -5,8 +5,12 @@
 
 .stm_t_snippet {
     width: 100%;
-    float: right;
     font-family: monospace;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.stm_snippets {
     margin-top: 10px;
     margin-bottom: 10px;
 }
