@@ -186,9 +186,12 @@ class TranslationsController extends Controller
     }
 
     /**
-     *
+     * Sending export file for downloading according to
+     * current serch criterias
      *
      * @return string|\yii\console\Response|\yii\web\Response
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \yii\base\Exception
      */
     public function actionExport()
     {
@@ -197,15 +200,22 @@ class TranslationsController extends Controller
 
         $file = StmImexService::exportTranslations($translationsDataProvider);
         if ($file !== null && file_exists($file)) {
-            return Yii::$app->response->sendFile( $file );
+            return Yii::$app->response->sendFile($file);
         }
+
         return Url::toRoute(array_merge(['i18n/index'], Yii::$app->request->queryParams));
     }
 
+    /**
+     * Uploads sended import/export file
+     * or displaying the log of file processing
+     *
+     * @return array|string
+     */
     public function actionImport()
     {
 
-        $request = Yii::$app->request;
+        $request  = Yii::$app->request;
         $filename = '';
 
         if ($request->getIsPost() && $request->getIsAjax()) {
@@ -213,15 +223,29 @@ class TranslationsController extends Controller
             $this->enableCsrfValidation = false;
             Yii::$app->response->format = Response::FORMAT_JSON;
 
-            $importUploadForm         = StmImexService::getUploadFormInstance();
+            $response = [
+                'status' => false,
+            ];
+
+            $importUploadForm                   = StmImexService::getUploadFormInstance();
             $importUploadForm->translationsFile = UploadedFile::getInstance($importUploadForm, 'translationsFile');
+
             if ($importUploadForm->upload()) {
                 $filename = $importUploadForm->translationsFile->getBaseName();
                 $filename .= '.' . $importUploadForm->translationsFile->getExtension();
-                return $this->redirect(['translations/import', 'file' => $filename]);
+
+                $response['status']   = true;
+                $response['filename'] = $filename;
+                $response['path']     = 'import';
+                $response['key']      = 'file';
+
             } else {
-                return $importUploadForm->getErrors();
+
+                $response['error'] = $importUploadForm->getErrors();
+
             }
+
+            return $response;
         }
 
         if (isset($request->queryParams['file'])) {
@@ -263,9 +287,9 @@ class TranslationsController extends Controller
             ])
         ) {
             return new StmTranslationsForm([
-                'category' => $category,
-                'alias'    => $alias,
-                'language' => $language_id,
+                'category'     => $category,
+                'alias'        => $alias,
+                'language'     => $language_id,
                 'date_updated' => new Expression('NOW()'),
                 'date_created' => new Expression('NOW()'),
             ]);

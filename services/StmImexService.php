@@ -169,9 +169,19 @@ class StmImexService
                     'alias'    => $data['alias'],
                 ]);
                 $record = $record == null ? new StmTranslations() : $record;
-                $record->setAttributes($data);
+                if ( ! isset($record->date_updated)
+                    || ( ! empty($record->date_updated)
+                        && strtotime($record->date_updated) < strtotime($data['date_updated'])
+                    )
+                ) {
+                    $record->setAttributes($data);
 
-                return $record->save();
+                    return $record->save();
+                } else {
+                    print_r('[ignore]');
+
+                    return true;
+                }
             } else {
                 print_r("[error] Category or Language is wrong \n");
             }
@@ -183,7 +193,7 @@ class StmImexService
     }
 
     /**
-     * @param $name
+     * @param string $categoryName
      *
      * @return \nikitich\simpletranslatemanager\models\StmCategories|null
      */
@@ -207,6 +217,11 @@ class StmImexService
         return null;
     }
 
+    /**
+     * @param string $langName
+     *
+     * @return \nikitich\simpletranslatemanager\models\StmLanguages|null
+     */
     private static function getLanguageByName($langName)
     {
         $language = StmLanguages::findOne(['language_id' => $langName]);

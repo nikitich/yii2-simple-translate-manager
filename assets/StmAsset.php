@@ -25,6 +25,7 @@ class StmAsset extends \yii\web\AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         'nikitich\simpletranslatemanager\assets\SweetAlertAsset',
+        'nikitich\simpletranslatemanager\assets\LoadingOverlayAsset',
     ];
 
 }
